@@ -1,0 +1,74 @@
+name: Validate Engineer Submission
+
+on:
+  pull_request:
+    paths:
+      - 'engineers/*.md'
+      - '!engineers/_template.md'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        run: sudo apt-get update && sudo apt-get install -y yq
+
+      - name: Validate submissions
+        id: validate
+        run: |
+          ERROR_COUNT=0
+          WARNING_COUNT=0
+
+          for file in engineers/*.md; do
+            [ "$file" = "engineers/_template.md" ] && continue
+            [ ! -f "$file" ] && continue
+
+            filename=$(basename "$file" .md)
+            echo "Validating: $file"
+
+            # Check name field exists
+            name=$(yq e '.name' "$file" 2>/dev/null)
+            if [ -z "$name" ] || [ "$name" = "null" ]; then
+              echo "::error file=$file::Missing required field: name"
+              ERROR_COUNT=$((ERROR_COUNT + 1))
+            fi
+
+            # Check github field exists
+            github=$(yq e '.github' "$file" 2>/dev/null)
+            if [ -z "$github" ] || [ "$github" = "null" ]; then
+              echo "::error file=$file::Missing required field: github"
+              ERROR_COUNT=$((ERROR_COUNT + 1))
+            else
+              # Check filename matches github field
+              if [ "$filename" != "$github" ]; then
+                echo "::error file=$file::Filename '$filename.md' does not match github field '$github'"
+                ERROR_COUNT=$((ERROR_COUNT + 1))
+              fi
+            fi
+
+            # Check specializations field exists and is non-empty
+            spec_count=$(yq e '.specializations | length' "$file" 2>/dev/null)
+            if [ "$spec_count" = "0" ] || [ -z "$spec_count" ]; then
+              echo "::error file=$file::Missing required field: specializations (must be non-empty array)"
+              ERROR_COUNT=$((ERROR_COUNT + 1))
+            fi
+
+            # Non-blocking link validation (warnings only)
+            for url_field in linkedin blog twitter; do
+              url=$(yq e ".$url_field" "$file" 2>/dev/null)
+              if [ -n "$url" ] && [ "$url" != "null" ]; then
+                if ! echo "$url" | grep -qE '^https?://'; then
+                  echo "::warning file=$file::$url_field field is not a valid URL: $url"
+                  WARNING_COUNT=$((WARNING_COUNT + 1))
+                fi
+              fi
+            done
+          done
+
+          echo "Validation complete: $ERROR_COUNT errors, $WARNING_COUNT warnings"
+          if [ $ERROR_COUNT -gt 0 ]; then
+            exit 1
+          fi
