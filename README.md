@@ -28,9 +28,9 @@ A community-driven directory of Governance, Risk, and Compliance (GRC) engineers
 
 ## Engineers
 
-<!-- Engineers will be listed here as they're added -->
-
+<!-- BEGIN_ENGINEER_LIST -->
 *No engineers yet. Be the first to add yourself!*
+<!-- END_ENGINEER_LIST -->
 
 ## Add Yourself
 
