@@ -42,8 +42,8 @@ jobs:
             frontmatter=$(sed -n '/^---$/,/^---$/p' "$file" | sed '1d;$d')
 
             # Parse required fields
-            name=$(echo "$frontmatter" | yq -r '.name // empty')
-            github=$(echo "$frontmatter" | yq -r '.github // empty')
+            name=$(echo "$frontmatter" | yq -r '.name // ""')
+            github=$(echo "$frontmatter" | yq -r '.github // ""')
 
             # Skip if required fields are missing
             if [[ -z "$name" || -z "$github" ]]; then
@@ -52,10 +52,10 @@ jobs:
             fi
 
             # Parse optional fields
-            specializations=$(echo "$frontmatter" | yq -r '.specializations // [] | join(", ")')
-            frameworks=$(echo "$frontmatter" | yq -r '.frameworks // [] | join(", ")')
-            linkedin=$(echo "$frontmatter" | yq -r '.linkedin // empty')
-            website=$(echo "$frontmatter" | yq -r '.website // empty')
+            specializations=$(echo "$frontmatter" | yq -r '(.specializations // []) | join(", ")')
+            frameworks=$(echo "$frontmatter" | yq -r '(.frameworks // []) | join(", ")')
+            linkedin=$(echo "$frontmatter" | yq -r '.linkedin // ""')
+            website=$(echo "$frontmatter" | yq -r '.website // ""')
 
             # Build links column
             links="[GitHub](https://github.com/$github)"
