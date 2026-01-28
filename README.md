@@ -29,7 +29,9 @@ A community-driven directory of Governance, Risk, and Compliance (GRC) engineers
 ## Engineers
 
 <!-- BEGIN_ENGINEER_LIST -->
-*No engineers yet. Be the first to add yourself!*
+| Name | Specializations | Frameworks | Links |
+|------|-----------------|------------|-------|
+| **[Brian Montiel](engineers/networkbm.md)** | Cloud Security, Compliance Automation, Offensive Security, Python & Rust | SOC 2, FedRAMP, GovRAMP | [GitHub](https://github.com/networkbm), [LinkedIn](https://www.linkedin.com/in/brian-montiel-95b38b239/), [Website](https://brianmontiel.netlify.app/) |
 <!-- END_ENGINEER_LIST -->
 
 ## Add Yourself
