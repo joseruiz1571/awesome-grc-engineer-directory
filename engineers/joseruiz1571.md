@@ -34,10 +34,7 @@ projects:
 
 ## About Me
 
-Write a brief bio about yourself here (2-4 paragraphs). Include information such as:
-
-- I'm a librarian based in Austin, Texas. After 15+ years in information governance and operations, I'm now focused on AI Security.
-- Building AI governance observability experiments with Python and Claude Code.
+I'm a librarian based in Austin, Texas. After 15+ years in information governance and operations, I'm now focused on AI Security and building AI governance observability experiments with Python and Claude Code.
 
 ## Get in Touch
 
